@@ -73,7 +73,7 @@ if __name__ == '__main__':
             if Goal_To_Be_Sent == Goal_To_Be_Update:
                 Goal_To_Be_Sent = Goal_To_Be_Update
                 position = {'x': Goal_To_Be_Sent[0], 'y' : Goal_To_Be_Sent[1]}
-                quaternion = {'r1' : 0.000, 'r2' : 0.000, 'r3' : 0.000, 'r4' : 1.000}
+                quaternion = {'r1' : 0.000, 'r2' : 0.000, 'r3' : 0.000, 'r4' : 0.000}
                 rospy.loginfo("========== Goal has been set! ==========")
                 success = navigator.goto(position, quaternion)
                 if success:
