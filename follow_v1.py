@@ -65,16 +65,16 @@ if __name__ == '__main__':
         Goal_To_Be_Sent = (1,0,0)
         Goal_To_Be_Update = (1,0,0)
         rospy.init_node('Follow_Node', anonymous=False)
-        rospy.Subscriber('/body_tracker/people', Point, callback=callback_people, queue_size=10)
+        rospy.Subscriber('/nearest/position', Point, callback=callback_people, queue_size=10)
         #rospy.Subscriber('/body_tracker/people', People, callback=callback_point, queue_size=10)
         navigator = GoToPose()
         
         while True:
-            if Goal_To_Be_Sent == Goal_To_Be_Update:
+            if Goal_To_Be_Sent != Goal_To_Be_Update:
                 Goal_To_Be_Sent = Goal_To_Be_Update
-                position = {'x': Goal_To_Be_Sent[0], 'y' : Goal_To_Be_Sent[1]}
-                quaternion = {'r1' : 0.000, 'r2' : 0.000, 'r3' : 0.000, 'r4' : 0.000}
-                rospy.loginfo("========== Goal has been set! ==========")
+                position = {'x': Goal_To_Be_Sent.z/1000, 'y':0.00}
+                quaternion = {'r1' : 0.000, 'r2' : 0.000, 'r3' : 0.000, 'r4' : 1.000}
+                rospy.loginfo("========== Goal has been set to (%s,%s)! ==========",position['x'],position['y'])
                 success = navigator.goto(position, quaternion)
                 if success:
                     rospy.loginfo("========== Wow, goal finished! ==========")
