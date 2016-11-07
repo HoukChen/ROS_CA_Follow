@@ -5,7 +5,7 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import actionlib
 from actionlib_msgs.msg import *
 from geometry_msgs.msg import Pose, Point, Quaternion
-from people_msgs import People
+#from people_msgs import People
 
 class GoToPose():
     
