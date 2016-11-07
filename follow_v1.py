@@ -11,7 +11,7 @@ class GoToPose():
     
     def __init__(self):
         self.goal_sent = False
-        rospym.on_shutdown(self.shutdown)
+        rospy.on_shutdown(self.shutdown)
         self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
         rospy.loginfo("Wait for the action server to come up")
         self.move_base.wait_for_server(rospy.Duration(5))
@@ -62,15 +62,15 @@ if __name__ == '__main__':
     try:
         global Goal_To_Be_Sent
         global Goal_To_Be_Update
-        Goal_To_Be_Sent = (0,0,0)
-        Goal_To_Be_Update = (0,0,0)
+        Goal_To_Be_Sent = (1,0,0)
+        Goal_To_Be_Update = (1,0,0)
         rospy.init_node('Follow_Node', anonymous=False)
         rospy.Subscriber('/body_tracker/people', Point, callback=callback_people, queue_size=10)
         #rospy.Subscriber('/body_tracker/people', People, callback=callback_point, queue_size=10)
         navigator = GoToPose()
         
-        while true:
-            if Goal_To_Be_Sent != Goal_To_Be_Update:
+        while True:
+            if Goal_To_Be_Sent == Goal_To_Be_Update:
                 Goal_To_Be_Sent = Goal_To_Be_Update
                 position = {'x': Goal_To_Be_Sent[0], 'y' : Goal_To_Be_Sent[1]}
                 quaternion = {'r1' : 0.000, 'r2' : 0.000, 'r3' : 0.000, 'r4' : 1.000}
