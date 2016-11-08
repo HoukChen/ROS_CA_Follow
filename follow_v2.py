@@ -23,7 +23,7 @@ def callback_people(People_Position):
 		angular = 0
     # linear velocity controller
     if distance_dep > DISTANCE_UPPER_LIMIT:
-        Linear_Vel = 0.2
+        Linear_Vel = 0.2 + 0.3*(distance_dep - DISTANCE_UPPER_LIMIT)/distance_dep  
     elif distance_dep < DISTANCE_LOWER_LIMIT and distance_dep != 0:
         Linear_Vel = -0.2
     else:
@@ -31,9 +31,9 @@ def callback_people(People_Position):
 
     # angular velocity controller
     if angular > ANGLE_UPPER_LIMIT:
-        Angular_Vel = 0.15
+        Angular_Vel = 0.2 + 0.2*(angular - ANGLE_UPPER_LIMIT)/angular
     elif angular < ANGLE_LOWER_LIMIT:
-        Angular_Vel = -0.15
+        Angular_Vel = -0.2 - 0.2*(angular - ANGLE_UPPER_LIMI)/angular
     else:
         Angular_Vel = 0
 
