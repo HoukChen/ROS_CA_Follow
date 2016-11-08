@@ -51,7 +51,7 @@ def main():
 
     rate = rospy.Rate(3)
     while not rospy.is_shutdown():
-        Linear_Vel = (2*LAST_VELOCITY + Linear_Vel)/3
+        Linear_Vel = (LAST_VELOCITY + Linear_Vel)/2
         vel_msg = Twist(Vector3(Linear_Vel,0,0), Vector3(0,0,Angular_Vel))
         vel_pub.publish(vel_msg)
         LAST_VELOCITY = Linear_Vel
