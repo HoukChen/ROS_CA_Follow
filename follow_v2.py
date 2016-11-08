@@ -23,17 +23,17 @@ def callback_people(People_Position):
 		angular = 0
     # linear velocity controller
     if distance_dep > DISTANCE_UPPER_LIMIT:
-        Linear_Vel = 0.2 + 0.3*(distance_dep - DISTANCE_UPPER_LIMIT)/distance_dep  
+        Linear_Vel = 0.1 + 0.3*(distance_dep - DISTANCE_UPPER_LIMIT)  
     elif distance_dep < DISTANCE_LOWER_LIMIT and distance_dep != 0:
-        Linear_Vel = -0.2
+        Linear_Vel = -0.1
     else:
         Linear_Vel = 0
 
     # angular velocity controller
     if angular > ANGLE_UPPER_LIMIT:
-        Angular_Vel = 0.2 + 0.2*(angular - ANGLE_UPPER_LIMIT)/angular
+        Angular_Vel = 0.2 + 0.4*(angular - ANGLE_UPPER_LIMIT)/angular
     elif angular < ANGLE_LOWER_LIMIT:
-        Angular_Vel = -0.2 - 0.2*(angular - ANGLE_UPPER_LIMI)/angular
+        Angular_Vel = -0.2 - 0.4*(angular - ANGLE_LOWER_LIMIT)/angular
     else:
         Angular_Vel = 0
 
@@ -41,13 +41,15 @@ def callback_people(People_Position):
 def main():
     global Linear_Vel
     global Angular_Vel
+    Linear_Vel = 0
+    Angular_Vel = 0
+
     rospy.init_node('Follow_Node')
     rospy.Subscriber('/nearest/position', Point, callback=callback_people, queue_size=10)
     vel_pub = rospy.Publisher('/cmd_vel_mux/input/navi', Twist, queue_size=1)
 
     rate = rospy.Rate(3)
-    while True:
-        #print 'hello, world'
+    while not rospy.is_shutdown():
         vel_msg = Twist(Vector3(Linear_Vel,0,0), Vector3(0,0,Angular_Vel))
         vel_pub.publish(vel_msg)
         print ("velocity:(%s,0,0) (0,0,%s)"%(Linear_Vel,Angular_Vel))
