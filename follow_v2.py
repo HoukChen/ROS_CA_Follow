@@ -43,6 +43,7 @@ def main():
     global Angular_Vel
     Linear_Vel = 0
     Angular_Vel = 0
+    LAST_VELOCITY = 0 # for velocity smoothing    
 
     rospy.init_node('Follow_Node')
     rospy.Subscriber('/nearest/position', Point, callback=callback_people, queue_size=10)
@@ -50,8 +51,10 @@ def main():
 
     rate = rospy.Rate(3)
     while not rospy.is_shutdown():
+        Linear_Vel = (2*LAST_VELOCITY + Linear_Vel)/3
         vel_msg = Twist(Vector3(Linear_Vel,0,0), Vector3(0,0,Angular_Vel))
         vel_pub.publish(vel_msg)
+        LAST_VELOCITY = Linear_Vel
         print ("velocity:(%s,0,0) (0,0,%s)"%(Linear_Vel,Angular_Vel))
         rate.sleep()
 
