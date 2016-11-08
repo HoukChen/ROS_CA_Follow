@@ -24,7 +24,7 @@ def callback_people(People_Position):
     # linear velocity controller
     if distance_dep > DISTANCE_UPPER_LIMIT:
         Linear_Vel = 0.2
-    elif distance_dep < DISTANCE_LOWER_LIMIT:
+    elif distance_dep < DISTANCE_LOWER_LIMIT and distance_dep != 0:
         Linear_Vel = -0.2
     else:
         Linear_Vel = 0
@@ -45,7 +45,7 @@ def main():
     rospy.Subscriber('/nearest/position', Point, callback=callback_people, queue_size=10)
     vel_pub = rospy.Publisher('/cmd_vel_mux/input/navi', Twist, queue_size=1)
 
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(3)
     while True:
         #print 'hello, world'
         vel_msg = Twist(Vector3(Linear_Vel,0,0), Vector3(0,0,Angular_Vel))
