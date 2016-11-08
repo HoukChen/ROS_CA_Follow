@@ -45,12 +45,12 @@ def main():
     rospy.Subscriber('/nearest/position', Point, callback=callback_people, queue_size=10)
     vel_pub = rospy.Publisher('/cmd_vel_mux/input/navi', Twist, queue_size=1)
 
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(1)
     while True:
         #print 'hello, world'
         vel_msg = Twist(Vector3(Linear_Vel,0,0), Vector3(0,0,Angular_Vel))
         vel_pub.publish(vel_msg)
-        print ("velocity:(%s,0,0) (0,0,%s)",Linear_Vel,Angular_Vel)
+        print ("velocity:(%s,0,0) (0,0,%s)"%(Linear_Vel,Angular_Vel))
         rate.sleep()
 
 if __name__=='__main__':
