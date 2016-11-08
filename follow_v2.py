@@ -17,8 +17,10 @@ def callback_people(People_Position):
     
     distance_dep = People_Position.z/1000
     distance_hor = People_Position.x/1000
-    angular = (math.atan(distance_hor/distance_dep)*360)/(2*math.pi)
-
+    if distance_dep != 0:    
+        angular = (math.atan(distance_hor/distance_dep)*360)/(2*math.pi)
+    else:
+		angular = 0
     # linear velocity controller
     if distance_dep > DISTANCE_UPPER_LIMIT:
         Linear_Vel = 0.2
@@ -28,7 +30,7 @@ def callback_people(People_Position):
         Linear_Vel = 0
 
     # angular velocity controller
-    if angular >ANGLE_UPPER_LIMIT:
+    if angular > ANGLE_UPPER_LIMIT:
         Angular_Vel = 0.15
     elif angular < ANGLE_LOWER_LIMIT:
         Angular_Vel = -0.15
@@ -48,6 +50,7 @@ def main():
         #print 'hello, world'
         vel_msg = Twist(Vector3(Linear_Vel,0,0), Vector3(0,0,Angular_Vel))
         vel_pub.publish(vel_msg)
+        print ("velocity:(%s,0,0) (0,0,%s)",Linear_Vel,Angular_Vel)
         rate.sleep()
 
 if __name__=='__main__':
