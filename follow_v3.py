@@ -42,9 +42,9 @@ def callback_people(tracked_persons):
 
     # angular velocity controller
     if angular > ANGLE_UPPER_LIMIT:
-        Angular_Vel = 0.2 + 0.4*(angular - ANGLE_UPPER_LIMIT)/angular
+        Angular_Vel = 0.2 + 0.3*(angular - ANGLE_UPPER_LIMIT)/angular
     elif angular < ANGLE_LOWER_LIMIT:
-        Angular_Vel = -0.2 - 0.4*(angular - ANGLE_LOWER_LIMIT)/angular
+        Angular_Vel = -0.2 - 0.3*(angular - ANGLE_LOWER_LIMIT)/angular
     else:
         Angular_Vel = 0
 
