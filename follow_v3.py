@@ -1,8 +1,11 @@
 #!/usr/bin/env python
-# Receiving message type geometry_msgs.msg Point
-# Publish velocity to the robot
+# The script is based on spencer-project, https://github.com/spencer-project/spencer_people_tracking
+# Subscribes to the topic /spencer/perception/tracked_persons, publishs velocity to drive the robot
+
 import rospy
 import math
+from spencer_tracking_msgs.msg import DetectedPersons
+from spencer_tracking_msgs.msg import TrackedPersons
 from geometry_msgs.msg import Point
 from geometry_msgs.msg import Twist, Vector3
 
@@ -12,12 +15,19 @@ DISTANCE_LOWER_LIMIT = 0.5
 ANGLE_UPPER_LIMIT = 10
 ANGLE_LOWER_LIMIT = -10
 
-def callback_people(People_Position):
+def callback_people(tracked_persons):
     global Linear_Vel
     global Angular_Vel
-    
-    distance_dep = People_Position.z/1000
-    distance_hor = People_Position.x/1000
+    tracks = tracked_persons.tracks
+    if (len(tracks)):
+        Any_tracked_person = tracks[0]
+        Tracked_position = Any_tracked_person.pose.pose.position
+        distance_dep = Tracked_position.x
+        distance_hor = Tracked_position.y
+    else:
+        distance_dep = 0
+        distance_hor = 0
+
     if distance_dep != 0:    
         angular = (math.atan(distance_hor/distance_dep)*360)/(2*math.pi)
     else:
@@ -47,7 +57,7 @@ def main():
     LAST_VELOCITY = 0 # for velocity smoothing    
 
     rospy.init_node('Follow_Node')
-    rospy.Subscriber('/nearest/position', Point, callback=callback_people, queue_size=10)
+    rospy.Subscriber('/spencer/perception/tracked_persons', TrackedPersons, callback=callback_people, queue_size=10)
     vel_pub = rospy.Publisher('/cmd_vel_mux/input/navi', Twist, queue_size=1)
 
     rate = rospy.Rate(3)

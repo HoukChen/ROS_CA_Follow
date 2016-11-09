@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Receive message type geometry_msgs.msg Point
+# Publish goal to MoveBase action
 
 import rospy
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
