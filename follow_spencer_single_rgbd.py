@@ -75,7 +75,7 @@ def main():
     rospy.Subscriber('/spencer/perception/tracked_persons', TrackedPersons, callback=callback_people, queue_size=10)
     vel_pub = rospy.Publisher('/cmd_vel_mux/input/navi', Twist, queue_size=1)
 
-    rate = rospy.Rate(3)
+    rate = rospy.Rate(5)
     while not rospy.is_shutdown():
         Linear_Vel = (LAST_VELOCITY + Linear_Vel)/2
         if Linear_Vel < 0.01:
