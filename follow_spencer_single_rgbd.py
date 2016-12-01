@@ -18,15 +18,23 @@ ANGLE_LOWER_LIMIT = -10
 def callback_people(tracked_persons):
     global Linear_Vel
     global Angular_Vel
+    # By default, no person is tracked
+    distance_dep = 0
+    distance_hor = 0
     tracks = tracked_persons.tracks
-    if (len(tracks)):
-        Any_tracked_person = tracks[0]
-        Tracked_position = Any_tracked_person.pose.pose.position
-        distance_dep = Tracked_position.x
-        distance_hor = Tracked_position.y
-    else:
-        distance_dep = 0
-        distance_hor = 0
+    priority_id = 100
+    priority_index = 100    
+    for index in range(len(tracks)): # If there are many tracked persons, follow the high_priority person 
+    	if tracks[index].track_id < priority_id and tracks[index].is_matched==True:
+    		priority_id = tracks[index].track_id
+    		priority_index = index
+
+	if priority_id != 100:    		
+		Target_tracked_person = tracks[priority_index]
+		Tracked_position = Target_tracked_person.pose.pose.position
+		distance_dep = Tracked_position.x
+		distance_hor = Tracked_position.y
+
 
     if distance_dep != 0:    
         angular = (math.atan(distance_hor/distance_dep)*360)/(2*math.pi)
