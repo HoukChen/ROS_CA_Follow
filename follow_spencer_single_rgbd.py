@@ -15,16 +15,23 @@ DISTANCE_LOWER_LIMIT = 0.5
 ANGLE_UPPER_LIMIT = 10
 ANGLE_LOWER_LIMIT = -10
 
+#LAST_VELOCITY_INFO = [0,0,0] # Recording info of last velocity ( Linear_Vel, Angular_Vel, and countinus_loss_track_count ) 
+
 def callback_people(tracked_persons):
     global Linear_Vel
     global Angular_Vel
+    global LAST_VELOCITY_INFO
     # By default, no person is tracked
     distance_dep = 0
     distance_hor = 0
     tracks = tracked_persons.tracks
+
+    # If there are many tracked persons, follow the high_priority person. The smaller ID, the higher priority.
+    distance_dep = 0
+    distance_hor = 0
     priority_id = 100
     priority_index = 100    
-    for index in range(len(tracks)): # If there are many tracked persons, follow the high_priority person 
+    for index in range(len(tracks)): 
     	if tracks[index].track_id < priority_id and tracks[index].is_matched==True:
     		priority_id = tracks[index].track_id
     		priority_index = index
