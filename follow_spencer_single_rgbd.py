@@ -10,10 +10,14 @@ from geometry_msgs.msg import Point
 from geometry_msgs.msg import Twist, Vector3
 
 # Unit of distance is meter, angle is degree
-DISTANCE_UPPER_LIMIT = 1.0
+DISTANCE_UPPER_LIMIT = 1.2
 DISTANCE_LOWER_LIMIT = 0.5
 ANGLE_UPPER_LIMIT = 10
 ANGLE_LOWER_LIMIT = -10
+LINEAR_ACCELERATION = 0.3
+LINEAR_BASE_VELOCITY = 0.1
+ANGULAR_ACCELERATION = 0.3
+ANGULAR_BASE_VELOCITY = 0.2
 
 #LAST_VELOCITY_INFO = [0,0,0] # Recording info of last velocity ( Linear_Vel, Angular_Vel, and countinus_loss_track_count ) 
 
@@ -30,9 +34,10 @@ def callback_people(tracked_persons):
     distance_dep = 0
     distance_hor = 0
     priority_id = 100
-    priority_index = 100    
+    priority_index = 100   
+
     for index in range(len(tracks)): 
-    	if tracks[index].track_id < priority_id and tracks[index].is_matched==True:
+    	if tracks[index].track_id < priority_id and tracks[index].pose.pose.position.x < 3.0:
     		priority_id = tracks[index].track_id
     		priority_index = index
 
@@ -49,17 +54,17 @@ def callback_people(tracked_persons):
         angular = 0
     # linear velocity controller
     if distance_dep > DISTANCE_UPPER_LIMIT:
-        Linear_Vel = 0.1 + 0.3*(distance_dep - DISTANCE_UPPER_LIMIT)  
+        Linear_Vel = LINEAR_BASE_VELOCITY + LINEAR_ACCELERATION*(distance_dep - DISTANCE_UPPER_LIMIT)  
     elif distance_dep < DISTANCE_LOWER_LIMIT and distance_dep != 0:
-        Linear_Vel = -0.1
+        Linear_Vel = -LINEAR_BASE_VELOCITY
     else:
         Linear_Vel = 0
 
     # angular velocity controller
     if angular > ANGLE_UPPER_LIMIT:
-        Angular_Vel = 0.2 + 0.3*(angular - ANGLE_UPPER_LIMIT)/angular
+        Angular_Vel = ANGULAR_BASE_VELOCITY + ANGULAR_ACCELERATION*(angular - ANGLE_UPPER_LIMIT)/angular
     elif angular < ANGLE_LOWER_LIMIT:
-        Angular_Vel = -0.2 - 0.3*(angular - ANGLE_LOWER_LIMIT)/angular
+        Angular_Vel = -ANGULAR_BASE_VELOCITY - ANGULAR_ACCELERATION*(angular - ANGLE_LOWER_LIMIT)/angular
     else:
         Angular_Vel = 0
 
