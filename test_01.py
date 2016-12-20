@@ -37,7 +37,7 @@ def callback_people(tracked_persons):
     priority_index = 100   
 
     for index in range(len(tracks)): 
-    	if tracks[index].track_id < priority_id:
+    	if tracks[index].track_id < priority_id and tracks.is_matched:
     		priority_id = tracks[index].track_id
     		priority_index = index
 
@@ -46,6 +46,10 @@ def callback_people(tracked_persons):
 		Tracked_position = Target_tracked_person.pose.pose.position
 		distance_dep = Tracked_position.x
 		distance_hor = Tracked_position.y
+
+		if distance_dep > 4 or distance_dep < 2 or distance_hor < -1 or distance_hor > 1:
+			distance_dep = 0
+    		distance_hor = 0			
 
 
     if distance_dep != 0:    
